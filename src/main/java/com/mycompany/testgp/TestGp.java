@@ -105,9 +105,11 @@ public class TestGp {
     public static void escreverImagemPGM(BufferedImage imagem, String caminho, boolean ascii) throws IOException {
         int largura = imagem.getWidth();
         int altura = imagem.getHeight();
+        BufferedImage teste = imagem;
+        
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(caminho));
-        writer.write(ascii ? "P3" : "P5");
+        writer.write(ascii ? "P2" : "P3");
         writer.newLine();
         writer.write("# Imagem filtrada");
         writer.newLine();
@@ -131,13 +133,16 @@ public class TestGp {
         } else {
             // Formato PGM RAW
             for (int y = 0; y < altura; y++) {
-            for (int x = 0; x < largura; x++) {
-                Color cor = new Color(imagem.getRGB(x, y));
-                int corCombinada = (cor.getRed() << 16) | (cor.getGreen() << 8) | cor.getBlue();
-                writer.write(corCombinada + " ");
+                for (int x = 0; x < largura; x++) {
+                    Color cor = new Color(imagem.getRGB(x, y));
+                    writer.write(Integer.toString(cor.getRed()));
+                    writer.newLine();
+                    writer.write(Integer.toString(cor.getGreen()));
+                    writer.newLine();
+                    writer.write(Integer.toString(cor.getBlue()));
+                    writer.newLine();
+                }
             }
-            writer.newLine();
-        }
         }
 
         writer.close();
@@ -145,13 +150,13 @@ public class TestGp {
 
     public static void main(String[] args) {
         try {
-//            BufferedImage imagem = lerImagemPGM("C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\cameraman.pgm");
-//            BufferedImage imagemFiltrada = filtrar(imagem, 9);
-//            escreverImagemPGM(imagemFiltrada, "C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\cameramanTeste.pgm", true);
+            BufferedImage imagem = lerImagemPGM("C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\cameraman.pgm");
+            BufferedImage imagemFiltrada = filtrar(imagem, 9);
+            escreverImagemPGM(imagemFiltrada, "C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\cameramanTeste.pgm", true);
 //
             BufferedImage imagemPPM = lerImagemPGM("C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\Autumn.ppm");
             BufferedImage imagemFiltradaPPM = filtrar(imagemPPM, 3);
-            escreverImagemPGM(imagemFiltradaPPM, "C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\AutumnTeste.ppm", true);
+            escreverImagemPGM(imagemFiltradaPPM, "C:\\Users\\carlo\\Documents\\NetBeansProjects\\TestGp\\src\\main\\java\\com\\mycompany\\testgp\\AutumnTeste.ppm", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
